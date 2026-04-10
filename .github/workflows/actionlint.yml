@@ -1,0 +1,19 @@
+name: 'Actionlint'
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: 'Run actionlint with reviewdog'
+      uses: reviewdog/action-actionlint@v1.7.2
+      with:
+        fail_on_error: true
+        reporter: 'github-pr-check'
