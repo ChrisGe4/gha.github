@@ -81,7 +81,7 @@ jobs:
           }
 
     - name: 'Run official stale bot'
-      uses: actions/stale@v9
+      uses: actions/stale@v10.2.0
       env:
         GITHUB_REPOSITORY: 'google-github-actions/${{ matrix.repo }}'
       with:
