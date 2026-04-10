@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
     - name: 'Run actionlint with reviewdog'
-      uses: reviewdog/action-actionlint@v1.7.2
+      uses: reviewdog/action-actionlint@v1.72.0
       with:
         fail_on_error: true
         reporter: 'github-pr-check'
