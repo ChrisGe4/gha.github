@@ -9,9 +9,9 @@ on:
 jobs:
   # Stage 1: Query the organization for all active repositories
   fetch-repositories:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.repos }}
+      matrix: '${{ steps.set-matrix.outputs.repos }}'
     steps:
       - id: 'auth-minty'
         name: 'Authenticate to Google Cloud'
@@ -40,7 +40,7 @@ jobs:
       - name: 'List active repositories'
         id: set-matrix
         env:
-          GH_TOKEN: ${{ steps.mint-github-token.outputs.token }}
+          GH_TOKEN: '${{ steps.mint-github-token.outputs.token }}'
         run: |
           # Query GitHub API for active, public, non-forked repositories and force single-line JSON to prevent GITHUB_OUTPUT truncation
           REPOS=$(gh api --paginate /orgs/google-github-actions/repos -q '[.[] | select(.archived == false and .private == false and .fork == false) | .name]' | jq -c .)
@@ -49,11 +49,11 @@ jobs:
   # Stage 2: Fan out official actions/stale across all discovered repositories
   apply-stale-rules:
     needs: fetch-repositories
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: false
       matrix:
-        repo: ${{ fromJson(needs.fetch-repositories.outputs.matrix) }}
+        repo: '${{ fromJson(needs.fetch-repositories.outputs.matrix) }}'
 
     steps:
       - id: 'auth-minty'
@@ -81,11 +81,11 @@ jobs:
             }
 
       - name: 'Run official stale bot'
-        uses: actions/stale@b5d41d4e1d5dceea10e7104786b73624c18a190f # ratchet:actions/stale@v10.2.0
+        uses: 'actions/stale@b5d41d4e1d5dceea10e7104786b73624c18a190f' # ratchet:actions/stale@v10.2.0
         env:
           GITHUB_REPOSITORY: 'google-github-actions/${{ matrix.repo }}'
         with:
-          repo-token: ${{ steps.mint-github-token.outputs.token }}
+          repo-token: '${{ steps.mint-github-token.outputs.token }}'
           operations-per-run: 300 # Increased burndown limit for first execution
 
           # Issue configuration (60 days total: 53 inactive + 7 warning)
