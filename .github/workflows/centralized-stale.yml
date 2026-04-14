@@ -43,8 +43,8 @@ jobs:
           GH_TOKEN: '${{ steps.mint-github-token.outputs.token }}'
         run: |
           # Query GitHub API for active, public, non-forked repositories and force single-line JSON to prevent GITHUB_OUTPUT truncation
-          REPOS=$(gh api --paginate /orgs/google-github-actions/repos -q '[.[] | select(.archived == false and .private == false and .fork == false) | .name]' | jq -c .)
-          echo "repos=${REPOS}" >> "$GITHUB_OUTPUT"
+REPOS=$(gh api --paginate /orgs/google-github-actions/repos | jq -s 'add | [.[] | select(.archived == false and .private == false and .fork == false) | .name]' -c)
+echo "repos=${REPOS}" >> "$GITHUB_OUTPUT"
 
   # Stage 2: Fan out official actions/stale across all discovered repositories
   apply-stale-rules:
